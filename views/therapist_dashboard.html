@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Therapist Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="max-w-3xl mx-auto p-6">
+    <h2 class="text-2xl font-semibold mb-4">Therapist Panel</h2>
+
+    <section class="bg-white p-4 rounded shadow mb-4">
+      <h3 class="font-medium">Your Sessions</h3>
+      <div id="sessions">Loading...</div>
+    </section>
+
+    <script>
+      // Example: therapist_id=1
+      async function loadSessions() {
+        const res = await fetch('/api/sessions/therapist/1');
+        const json = await res.json();
+        const el = document.getElementById('sessions');
+        if (!json.length) el.innerHTML = '<div class="p-2">No sessions</div>';
+        else el.innerHTML = json.map(s => <div class="p-2 border-b">${s.session_date} ${s.session_time} — ${s.status}</div>).join('');
+      }
+      loadSessions();
+    </script>
+  </div>
+</body>
+</html>

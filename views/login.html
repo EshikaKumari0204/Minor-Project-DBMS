@@ -1,0 +1,42 @@
+ <!doctype html>
+<html>
+<head>
+
+ <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="max-w-md mx-auto p-6">
+    <h2 class="text-2xl font-semibold mb-4">Login</h2>
+    <form id="loginForm" class="bg-white p-4 rounded shadow">
+      <div class="mb-2">
+        <label>Email</label>
+        <input name="email" type="email" class="border p-2 rounded w-full" />
+      </div>
+      <div class="mb-2">
+        <label>Password</label>
+        <input name="password" type="password" class="border p-2 rounded w-full" />
+      </div>
+      <button class="bg-blue-600 text-white px-4 py-2 rounded">Login</button>
+      <div class="mt-4 text-sm">
+        Don't have an account? <a href="/views/register.html" class="text-blue-600 underline">Register</a>
+      </div>
+    </form>
+
+    <script>
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const res = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify({ email: form.email.value, password: form.password.value }) });
+        const json = await res.json();
+        if (res.ok) {
+          alert('Logged in');
+          window.location = '/';
+        } else alert(json.message || 'Error');
+      });
+    </script>
+  </div>
+</body>
+</html>

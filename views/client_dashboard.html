@@ -1,0 +1,68 @@
+   
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Client Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="max-w-3xl mx-auto p-6">
+    <h2 class="text-2xl font-semibold mb-4">Client Dashboard</h2>
+
+    <section class="bg-white p-4 rounded shadow mb-4">
+      <h3 class="font-medium">Record Mood Today</h3>
+      <form id="moodForm" class="mt-2">
+        <input type="hidden" name="client_id" value="1" />
+        <div class="mb-2">
+          <label class="block">Mood score (1-10)</label>
+          <input name="mood_score" type="number" min="1" max="10" class="border p-2 rounded w-24" />
+        </div>
+        <div class="mb-2">
+          <label class="block">Notes</label>
+          <textarea name="notes" class="border p-2 rounded w-full"></textarea>
+        </div>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+      </form>
+
+      <div id="result" class="mt-2"></div>
+    </section>
+
+    <section class="bg-white p-4 rounded shadow">
+      <h3 class="font-medium mb-2">Mood Trend</h3>
+      <canvas id="moodChart" width="600" height="300"></canvas>
+    </section>
+
+    <script>
+      //getting the mood of the client 
+      async function loadChart() {
+        const clientId = 1;
+        const res = await fetch(`/api/mood/client/${clientId}`);
+        const rows = await res.json();
+        const labels = rows.map(r => r.date);
+        const data = rows.map(r => r.mood_score);
+        const ctx = document.getElementById('moodChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'line',
+          data: { labels, datasets: [{ label: 'Mood score', data, tension:0.3 }]},
+          options: { scales: { y: { min:1, max:10 } } }
+        });
+      }
+       //saving the current mood by filling the form
+      document.getElementById('moodForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const data = { client_id: form.client_id.value, date: new Date().toISOString().slice(0,10), mood_score: form.mood_score.value, notes: form.notes.value };
+        const res = await fetch('/api/mood', { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify(data) });
+        const json = await res.json();
+        document.getElementById('result').innerText = json.moodId ? 'Saved ' : 'Error';
+        await loadChart();
+      });
+
+      loadChart();
+    </script>
+  </div>
+</body>
+</html>
