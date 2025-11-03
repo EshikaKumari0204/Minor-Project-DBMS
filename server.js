@@ -7,17 +7,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 // Routes
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users');
+const authRoutes = require('./routes/authroutes');
+const userRoutes = require('./routes/user');
 const sessionRoutes = require('./routes/sessions');
 const moodRoutes = require('./routes/mood');
-
-
+const therapistRoutes = require('./routes/therapistroutes');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/views', express.static(path.join(__dirname, 'views')));
-
 app.use(session({
   secret: process.env.SESSION_SECRET || 'keyboard cat',
   resave: false,
@@ -27,11 +25,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/mood', moodRoutes);
-app.use('/api/email', emailRoutes);
-
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'layout.html'));
 });
-
-app.listen(PORT, () => console.log(Server listening on ${PORT}));
-
+app.listen(PORT, () => console.log(`Server listening on ${PORT}`));

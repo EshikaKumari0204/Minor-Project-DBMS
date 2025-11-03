@@ -20,7 +20,7 @@
         const res = await fetch('/api/users');
         const json = await res.json();
         const el = document.getElementById('usersList');
-        el.innerHTML = json.map(u => <div class="p-2 border-b">${u.name} — ${u.email} — ${u.role}</div>).join('');
+        el.innerHTML = json.map(u => `<div class="p-2 border-b">${u.name} — ${u.email} — ${u.role}</div>`).join('');
       }
       loadUsers();
     </script>

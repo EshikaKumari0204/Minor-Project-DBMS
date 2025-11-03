@@ -1,18 +1,22 @@
-import mysql from "mysql2";
-import dotenv from "dotenv";
+const mysql=require("mysql2/promise");
+const dotenv=require("dotenv");
 dotenv.config();
-const pool=mysql.createConnection({
-  host:process.env.DB_HOST,
-  user:process.env.DB_USER,
-  password:process.env.DB_PASS,
-  database:process.env.DB_NAME,
- 
-})
-pool.connect(err=>{
-  if(err){
-    console.log("error while connecting ",err);
+
+const pool = mysql.createConnection({
+  host: process.env.MYSQL_ADDON_HOST,
+  user: process.env.MYSQL_ADDON_USER,
+  password: process.env.MYSQL_ADDON_PASSWORD,
+  database: process.env.MYSQL_ADDON_DB,
+  port: process.env.MYSQL_ADDON_PORT
+});
+
+pool.connect(err => {
+  if (err) {
+    console.error(" Error while connecting:", err);
+  } else {
+    console.log(" MySQL connected successfully");
   }
-  console.log("mysql connected ");
-})
-export default pool;
+});
+
+export default pool;
 // mysql -h b08mjxqi1rriducdc8qw-mysql.services.clever-cloud.com -P 3306 -u u45wrjlxliy9jfh5 -p b08mjxqi1rriducdc8qw

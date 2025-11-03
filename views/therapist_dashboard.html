@@ -17,12 +17,12 @@
 
     <script>
       // Example: therapist_id=1
-      async function loadSessions() {
+        async function loadSessions() {
         const res = await fetch('/api/sessions/therapist/1');
         const json = await res.json();
         const el = document.getElementById('sessions');
         if (!json.length) el.innerHTML = '<div class="p-2">No sessions</div>';
-        else el.innerHTML = json.map(s => <div class="p-2 border-b">${s.session_date} ${s.session_time} — ${s.status}</div>).join('');
+        else el.innerHTML = json.map(s => `<div class="p-2 border-b">${s.session_date} ${s.session_time} — ${s.status}</div>`).join('');
       }
       loadSessions();
     </script>

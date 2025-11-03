@@ -5,7 +5,7 @@ async function createSession(req, res) {
   try {
     const { therapist_id, client_id, session_date, session_time, duration } = req.body;
     const [result] = await pool.query(
-      INSERT INTO Sessions (therapist_id, client_id, session_date, session_time, duration, status) VALUES (?,?,?,?,?,?),
+      'INSERT INTO Sessions (therapist_id, client_id, session_date, session_time, duration, status) VALUES (?,?,?,?,?,?)',
       [therapist_id, client_id, session_date, session_time, duration, 'scheduled']
     );
     res.json({ sessionId: result.insertId });
