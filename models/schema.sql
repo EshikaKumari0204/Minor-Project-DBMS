@@ -97,5 +97,6 @@ VALUES
        AND client_id = (SELECT client_id FROM Clients WHERE user_id = (SELECT user_id FROM Users WHERE email='raj@example.com'))
      LIMIT 1),
     4,
-    'Good experience overall, therapist was understanding and gave helpful advice.'
+    'Good experience, therapist was understanding and gave helpful advice.'
   );
+
